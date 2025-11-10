@@ -121,14 +121,12 @@ The Insert at Head list operation appends a new node at the start of the singly 
 Case 1: Empty List 
 - Head pointer is null
 - Create new node 
-- Store data in new node
 - Set new node next pointer to null. Since head is null, we set new node's next to head.
 - Set head pointer to new node 
 
 Case 2: Non-Empty List 
 - Head pointer is not null, points to first node in list 
 - Create new node
-- Store data in new node
 - Set new node's next pointer to head pointer
 - Set head pointer to new node 
 
@@ -183,5 +181,43 @@ void insertAtTail(Node** head, int data) {
 
     // Set last node pointer to new node
     tail->next = newNode;
+}
+```
+
+### Insert at a specific index position 
+
+Behavior: Add a node before the indexth node in the list. If the index equals the length of the linked list, the node will be appended to the end of the linked list. If the index is greater than the length, the node will not be inserted.
+
+Let's assume the list is of length n with index positions 0, through n-1. Inserting at index 0 means inserting a the head of the list. Inserting at index n means inserting at the end of the list. Inserting at index n+1 or greater means the node will not be inserted because the index is longer than the list length n.
+
+
+Algorithm 
+
+- If index is 0, insert at head of list 
+- Initialize a counter variable and a temporary pointer to traverse the linked list.
+- Iterate over the linked list to find the node before the insertion point (index position - 1)
+    - If the temporary pointer becomes null before reaching the desired position, the position is out of range. Return.
+- Create a new node 
+- Point the new node's next pointer to the node just after the temporary pointer (temporary->next).
+- Point the temporary node's next pointer to the new node.
+
+```c
+void insertAtIndex(Node** head, int val, int index){
+    if(index == 0){
+        insertAtHead(head, val);
+    }
+
+    Node* temp = *head;
+    for(int i = 0; temp != NULL && i < index-1; i++){
+        temp = temp->next;
+    }
+
+    if(temp == NULL){
+        return;
+    }
+
+    struct Node* newNode = createNode(val);
+    newNode->next = temp->next;
+    temp->next = newNode;
 }
 ```
