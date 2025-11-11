@@ -85,6 +85,57 @@ void TestLinkedList::runInsertTailTests(int numTests)
     }
 }
 
+void TestLinkedList::runInsertIndexTests(int numTests)
+{
+    #if 0
+    {
+        // empty list test, insert at index 0 
+        std::vector<int> buildVals;         // empty vector should cause empty list
+
+        int val = m_rg.generate(MIN_LIST_VALUE, MAX_LIST_VALUE);
+        std::vector<int> expected = {val};
+        std::pair<int, int> pair = {0, val}; 
+        std::vector<std::pair<int,int>> insertVals;
+        insertVals.push_back(pair);
+        testInsertAtIndex(buildVals, expected, insertVals);
+    }
+
+    {
+        // empty list test, insert at index 1 
+        // should not insert value into list 
+        std::vector<int> buildVals;         // empty vector should cause empty list
+
+        int val = m_rg.generate(MIN_LIST_VALUE, MAX_LIST_VALUE);
+        std::vector<int> expected;
+        std::pair<int, int> pair = {1, val}; 
+        std::vector<std::pair<int,int>> insertVals;
+        insertVals.push_back(pair);
+        testInsertAtIndex(buildVals, expected, insertVals);
+    }
+    #endif
+
+    numTests = 1;
+
+    // build list 
+    for(int i = 0; i < numTests; i++)
+    {
+        std::vector<int> buildVals;
+        std::vector<int> expectedVals;
+        appendVals(buildVals, 1, 11, 2);
+        appendVals(expectedVals, 0, 12, 1);
+
+        std::vector<std::pair<int,int>> insertPairs;
+
+        for(int i = 0; i < 6; i++)
+        {
+            std::pair<int,int> pair = {2*i, 2*i};
+            insertPairs.push_back(pair);
+        }
+        testInsertAtIndex(buildVals, expectedVals, insertPairs);
+
+    }
+}
+
  void TestLinkedList::fillRandom(std::vector<int>& testVals)
  {
     size_t n = testVals.size();
@@ -93,6 +144,15 @@ void TestLinkedList::runInsertTailTests(int numTests)
         testVals[i] = m_rg.generate(MIN_LIST_VALUE, MAX_LIST_VALUE);
     }
  }
+
+
+void TestLinkedList::appendVals(std::vector<int>& array, int start, int stop, int step)
+{
+    for(int i = start; i <= stop; i += step)
+    {
+        array.push_back(i);
+    }
+}
 
 void TestLinkedList::testInsertHead(const std::vector<int>& testVals, const std::vector<int>& expected)
 {
@@ -134,61 +194,49 @@ void TestLinkedList::testInsertTail(const std::vector<int>& testVals, const std:
 }
 
 
-#if 0
-void TestLinkedList::testInsertAtIndex()
+void TestLinkedList::testInsertAtIndex(const std::vector<int>& buildVals, const std::vector<int>& expected,
+                            const std::vector<std::pair<int,int>>& insertVals)
 {
+    // Build list 
+    MyLinkedList list;
+    for(auto v : buildVals)
     {
-        std::cerr << "Test 1\n";
-        const int expected[3] = {1, 2, 3};
-
-        MyLinkedList list;
-        list.insertAtHead(1);
-        list.insertAtTail(3);
-        list.insertAtIndex(1, 2);
-        compareResult(expected, 3, list);
-
-        int val = list.get(1);
-        if(val != 2){
-            std::cerr << "ERROR, get(1) returned " << val << ", expected: " << expected << "\n";
-            std::cerr << "List contents: " << list << "\n";
-        }
-
-        std::cerr << "Before deleting at index 0, list contents: " << list << "\n";
-
-        list.deleteAtIndex(0);
-
-        std::cerr << "After deleting at index 0, list contents: " << list << "\n";
-
-        val = list.get(0);
-        if(val != 2){
-            std::cerr << "ERROR, line: " << __LINE__ << " get(0) returned " << val << ", expected: " << expected << "\n";
-            std::cerr << "List contents: " << list << "\n";
-        }
-
+        list.insertAtTail(v);
     }
 
+    for(auto pair : insertVals)
     {
-        std::cerr << "Test 2\n";
+        list.insertAtIndex(pair.first, pair.second);
+    }
 
-        const int expected[2] = {1,2};
-        MyLinkedList list;
-        list.insertAtHead(2);
-        list.insertAtIndex(0,1);
-        compareResult(expected, 2, list);
-
-        std::cerr << "List contents: " << list;
-        int val = list.get(1);
-        if(val != 2){
-            std::cerr << "ERROR, line: " << __LINE__ << ", get(0) returned " << val << ", expected: " << expected << "\n";
-            std::cerr << "List contents: " << list << "\n";
+    std::vector<Difference> differences;
+    if(!compareResult(list, expected, differences))
+    {
+        std::cerr << "[FATAL], function: " << __func__ << ", line: " << __LINE__ 
+            << " comparison failed\n"; 
+        std::cerr << "List    : " << list << "\n";
+        std::cerr << "Expected: ";
+        for(auto v : expected)
+        {
+            std::cerr << v << " ";
         }
+        std::cerr << "\n\n";
+
+        std::cerr << "Differences: ";
+        for(auto d : differences)
+        {
+            std::cerr << d;
+        }
+        std::cerr << "\n";
+        std::exit(-1);
     }
 }
 
-#endif 
+
 
 void TestLinkedList::runAllTests()
 {
     runInsertHeadTests();
     runInsertTailTests();
+    runInsertIndexTests();
 }

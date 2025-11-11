@@ -1,5 +1,6 @@
 #pragma once 
 
+#include <utility>              // std::pair
 #include <vector>
 #include "myLinkedList.h"
 #include "randomGenerator.hpp"
@@ -27,6 +28,7 @@ class TestLinkedList
     void runAllTests();
     void runInsertHeadTests(int numTests = NUM_TESTS);
     void runInsertTailTests(int numTests = NUM_TESTS);
+    void runInsertIndexTests(int numTests = NUM_TESTS);
 
 
     private:
@@ -37,9 +39,15 @@ class TestLinkedList
 
     void fillRandom(std::vector<int>& testVals);
 
+    // appends values from start to stop (inclusive), increments by step 
+    // to end of array 
+    void appendVals(std::vector<int>& array, int start, int stop, int step);
+   
+
     void testInsertHead(const std::vector<int>& testVals, const std::vector<int>& expected);
     void testInsertTail(const std::vector<int>& testVals, const std::vector<int>& expected);
-    //void testInsertAtIndex();
+    void testInsertAtIndex(const std::vector<int>& buildVals, const std::vector<int>& expected,
+                            const std::vector<std::pair<int,int>>& insertVals);
 
 };
 
