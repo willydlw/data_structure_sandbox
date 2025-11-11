@@ -8,6 +8,6 @@
 int main()
 {
     TestLinkedList test;
-    test.runInsertHeadTests();
+    test.runAllTests();
     return 0;
 }

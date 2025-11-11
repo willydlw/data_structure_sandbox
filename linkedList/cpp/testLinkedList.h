@@ -24,9 +24,9 @@ class TestLinkedList
 
     public:
 
-    //void runAllTests();
-    void runInsertHeadTests();
-    //void runInsertTailTests();
+    void runAllTests();
+    void runInsertHeadTests(int numTests = NUM_TESTS);
+    void runInsertTailTests(int numTests = NUM_TESTS);
 
 
     private:
@@ -38,7 +38,7 @@ class TestLinkedList
     void fillRandom(std::vector<int>& testVals);
 
     void testInsertHead(const std::vector<int>& testVals, const std::vector<int>& expected);
-    //void testInsertTail();
+    void testInsertTail(const std::vector<int>& testVals, const std::vector<int>& expected);
     //void testInsertAtIndex();
 
 };

@@ -51,9 +51,9 @@ bool TestLinkedList::compareResult(const MyLinkedList& list, const std::vector<i
     return true;
 }
 
-void TestLinkedList::runInsertHeadTests()
+void TestLinkedList::runInsertHeadTests(int numTests)
 {
-    for(int i = 0; i < NUM_TESTS; i++)
+    for(int i = 0; i < numTests; i++)
     {
         int length = m_rg.generate(MIN_ARRAY_SIZE, MAX_ARRAY_SIZE);
         std::vector<int> testVals(length);
@@ -66,8 +66,23 @@ void TestLinkedList::runInsertHeadTests()
         std::reverse(expected.begin(), expected.end()); 
 
         testInsertHead(testVals, expected);
+    } 
+}
+
+void TestLinkedList::runInsertTailTests(int numTests)
+{
+    for(int i = 0; i < numTests; i++)
+    {
+        int length = m_rg.generate(MIN_ARRAY_SIZE, MAX_ARRAY_SIZE);
+        std::vector<int> testVals(length);
+        fillRandom(testVals);
+
+        // make reversed copy of test value 
+        // linked list will be in same order as testVals when adding at tail
+        std::vector<int> expected(testVals);            // make copy
+
+        testInsertTail(testVals, expected);
     }
-    
 }
 
  void TestLinkedList::fillRandom(std::vector<int>& testVals)
@@ -98,23 +113,28 @@ void TestLinkedList::testInsertHead(const std::vector<int>& testVals, const std:
     }
 }
 
-#if 0
-void TestLinkedList::testInsertTail()
-{
-    {
-        const int testData[3] = {1, 2, 3};
-        const int expected[3] = {1, 2, 3};
-        MyLinkedList list;
-        for(int i = 0; i < 3; i++){
-            list.insertAtTail(testData[i]);
-        }
 
-        if(!compareResult(expected, 3, list))
-        {
-            std::cerr << "[ERROR], function: " << __func__ << "\n";
-        }
+void TestLinkedList::testInsertTail(const std::vector<int>& testVals, const std::vector<int>& expected)
+{
+     size_t n = testVals.size();
+
+    MyLinkedList list;
+    for(size_t i = 0; i < n; i++)
+    {
+        list.insertAtTail(testVals[i]);
     }
+
+    std::vector<Difference> differences;
+    if(!compareResult(list, expected, differences))
+    {
+        std::cerr << "[FATAL] function: " << __func__ << ", line: " << __LINE__
+                << "testInsertTail returned false\n";
+        std::exit(-1);
+    }  
 }
+
+
+#if 0
 void TestLinkedList::testInsertAtIndex()
 {
     {
@@ -165,11 +185,10 @@ void TestLinkedList::testInsertAtIndex()
     }
 }
 
+#endif 
+
 void TestLinkedList::runAllTests()
 {
-    testInsertHead();
-    testInsertTail();
-    testInsertAtIndex();
+    runInsertHeadTests();
+    runInsertTailTests();
 }
-
-#endif
