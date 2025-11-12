@@ -50,6 +50,7 @@
 
     if(index == 0){
         insertAtHead(val);
+        return;
     }
 
     Node* current = headptr;
@@ -59,7 +60,8 @@
     }
 
     if(current == nullptr){
-        std::cerr << "function: " << __func__ << ", index " << index << " is invalid\n";
+        std::cerr << "function: " << __func__ << ", index " << index 
+                << " is invalid, longer than list length, current == nullptr\n";
         return;
     }
 
@@ -68,8 +70,8 @@
     current->next = newNode;
  }
 
-  int MyLinkedList::get(int index)
-  {
+int MyLinkedList::get(int index)
+{
     if(headptr == nullptr || index < 0){
         return -1;
     }
@@ -79,17 +81,18 @@
     }
 
     Node* current = headptr;
-    for(int i = 0; current != nullptr && i < index; i++){
+    int i;
+    for(i = 0; current != nullptr && i < index; i++){
         current = current->next;
     }
 
     if(current == nullptr){
-        std::cerr << "[WARNING], function: " << __func__ << ", invalid index: " << index << "\n";
+        std::cerr << "[WARNING], function: " << __func__ << ", invalid index: " << index 
+            << ", list length i: " << i << "\n";
         return -1;
     }
 
     return current->data;
-
 }
 
 

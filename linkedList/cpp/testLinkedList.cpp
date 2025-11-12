@@ -112,27 +112,88 @@ void TestLinkedList::runInsertIndexTests(int numTests)
         insertVals.push_back(pair);
         testInsertAtIndex(buildVals, expected, insertVals);
     }
-    #endif
 
-    numTests = 1;
-
-    // build list 
-    for(int i = 0; i < numTests; i++)
-    {
+    {   // all insertions should be valid 
+        // initial list 1, 3, 5, 7, 9, 11
         std::vector<int> buildVals;
-        std::vector<int> expectedVals;
         appendVals(buildVals, 1, 11, 2);
-        appendVals(expectedVals, 0, 12, 1);
 
+        // create pairs array <insert index, val to insert>
+        // test values <0,0> <2,2> <4,4> <6,6> <8,8> <10,10>
         std::vector<std::pair<int,int>> insertPairs;
-
         for(int i = 0; i < 6; i++)
         {
             std::pair<int,int> pair = {2*i, 2*i};
             insertPairs.push_back(pair);
         }
-        testInsertAtIndex(buildVals, expectedVals, insertPairs);
 
+        // expected list after insertions
+        // 0 1 2 3 4 5 6 7 8 9 10
+        std::vector<int> expectedVals;
+        appendVals(expectedVals, 0, 11, 1);
+
+        testInsertAtIndex(buildVals, expectedVals, insertPairs);        
+    }
+
+    {   // test insertion at negative index 
+        std::vector<int> buildVals;
+        appendVals(buildVals, 0,5,1);
+        std::vector<int> expectedVals(buildVals);
+        std::vector<std::pair<int,int>> insertPairs;
+        std::pair<int,int> pair = {-1, -1};
+        insertPairs.push_back(pair);
+        testInsertAtIndex(buildVals, expectedVals, insertPairs);
+    }
+
+    {   // test insertion at index value equal to list length
+        // should add at tail
+        std::vector<int> buildVals;
+        appendVals(buildVals, 0,5,1);
+        std::vector<int> expectedVals;
+        appendVals(expectedVals, 0, 6, 1);
+
+        std::vector<std::pair<int,int>> insertPairs;
+        std::pair<int,int> pair = {6, 6};
+        insertPairs.push_back(pair);
+        
+        testInsertAtIndex(buildVals, expectedVals, insertPairs);
+    }
+
+    {   // test insertion at index value greater than list length
+        // should not insert 
+        std::vector<int> buildVals;
+        appendVals(buildVals, 0,5,1);
+        std::vector<int> expectedVals(buildVals);
+       
+        std::vector<std::pair<int,int>> insertPairs;
+        std::pair<int,int> pair = {7, 6};
+        insertPairs.push_back(pair);
+        
+        testInsertAtIndex(buildVals, expectedVals, insertPairs);
+    }
+
+    #endif
+
+    {   // test insertions at random valid index locations 
+        for(int t = 0; t < numTests; t++)
+        {
+            // create array of random values for initial list 
+            std::vector<int> buildVals;
+            fillRandom(buildVals);
+
+            std::vector<std::pair<int,int>> insertPairs;
+            int numPairs = m_rg.generate(MIN_INSERTIONS, MAX_INSERTIONS);
+            generateValidInsertionPairs(insertPairs, numPairs, static_cast<int>(buildVals.size()));
+
+            std::vector<int> expectedVals(buildVals);
+            for(auto pair : insertPairs)
+            {
+                std::vector<int>::iterator position = expectedVals.begin() + pair.first;
+                expectedVals.insert(position, pair.second);
+            }
+
+            testInsertAtIndex(buildVals, expectedVals, insertPairs);
+        }
     }
 }
 
@@ -142,6 +203,20 @@ void TestLinkedList::runInsertIndexTests(int numTests)
     for(size_t i = 0; i < n; i++)
     {
         testVals[i] = m_rg.generate(MIN_LIST_VALUE, MAX_LIST_VALUE);
+    }
+ }
+
+ void TestLinkedList::generateValidInsertionPairs(std::vector<std::pair<int,int>>& pairs, int numPairs, int maxIndex)
+ {
+    for(int i = 0; i < numPairs; i++)
+    {
+        int index = m_rg.generate(0, maxIndex);
+        int val = m_rg.generate(MIN_LIST_VALUE, MAX_LIST_VALUE);
+        std::pair<int,int> pair = {index, val};
+        pairs.push_back(pair);
+
+        // increment the max index value as list will grow in size by 1
+        maxIndex++;
     }
  }
 

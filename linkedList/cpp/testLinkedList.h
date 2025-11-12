@@ -23,6 +23,9 @@ class TestLinkedList
     static constexpr int MIN_LIST_VALUE = -9999;
     static constexpr int MAX_LIST_VALUE = +9999;
 
+    static constexpr int MIN_INSERTIONS = 1;
+    static constexpr int MAX_INSERTIONS = 100;
+
     public:
 
     void runAllTests();
@@ -38,6 +41,10 @@ class TestLinkedList
     bool compareResult(const MyLinkedList& list, const std::vector<int>& expected, std::vector<Difference>& diff);
 
     void fillRandom(std::vector<int>& testVals);
+
+    // Creates array of valid index locations for insertion 
+    // Values to be inserted are random
+    void generateValidInsertionPairs(std::vector<std::pair<int,int>>& pairs, int numPairs, int maxIndex);
 
     // appends values from start to stop (inclusive), increments by step 
     // to end of array 
