@@ -87,7 +87,6 @@ void TestLinkedList::runInsertTailTests(int numTests)
 
 void TestLinkedList::runInsertIndexTests(int numTests)
 {
-    #if 0
     {
         // empty list test, insert at index 0 
         std::vector<int> buildVals;         // empty vector should cause empty list
@@ -171,8 +170,6 @@ void TestLinkedList::runInsertIndexTests(int numTests)
         
         testInsertAtIndex(buildVals, expectedVals, insertPairs);
     }
-
-    #endif
 
     {   // test insertions at random valid index locations 
         for(int t = 0; t < numTests; t++)
