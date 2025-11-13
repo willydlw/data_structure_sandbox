@@ -32,6 +32,7 @@ class TestLinkedList
     void runInsertHeadTests(int numTests = NUM_TESTS);
     void runInsertTailTests(int numTests = NUM_TESTS);
     void runInsertIndexTests(int numTests = NUM_TESTS);
+    void runGetTests(int numTests = NUM_TESTS);
 
 
     private:
@@ -40,7 +41,7 @@ class TestLinkedList
 
     bool compareResult(const MyLinkedList& list, const std::vector<int>& expected, std::vector<Difference>& diff);
 
-    void fillRandom(std::vector<int>& testVals);
+    void fillRandom(std::vector<int>& testVals, int min = MIN_LIST_VALUE, int max = MAX_LIST_VALUE);
 
     // Creates array of valid index locations for insertion 
     // Values to be inserted are random
@@ -55,6 +56,8 @@ class TestLinkedList
     void testInsertTail(const std::vector<int>& testVals, const std::vector<int>& expected);
     void testInsertAtIndex(const std::vector<int>& buildVals, const std::vector<int>& expected,
                             const std::vector<std::pair<int,int>>& insertVals);
+    
+    void testGet(const std::vector<int>& listVals, const std::vector<int>& expected, const std::vector<int>& testIndices);
 
 };
 

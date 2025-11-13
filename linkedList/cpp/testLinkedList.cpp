@@ -194,12 +194,70 @@ void TestLinkedList::runInsertIndexTests(int numTests)
     }
 }
 
- void TestLinkedList::fillRandom(std::vector<int>& testVals)
+void TestLinkedList::runGetTests(int numTests)
+{
+    {
+        // test empty list 
+        std::vector<int> buildVals;
+        std::vector<int> expectedVals;
+        std::vector<int> testIndices = {0, 1};
+    }
+
+    {
+        // test all indices of sequential list 
+        std::vector<int> buildVals;    
+        appendVals(buildVals, 0,10,1);
+
+        // test list will be in reverse order of build vals
+        std::vector<int> expected(buildVals);
+        std::reverse(buildVals.begin(), buildVals.end());
+
+        // yes, this is repetitive
+        std::vector<int> testIndices(buildVals);
+
+        testGet(buildVals, expected, testIndices);
+    }
+
+    {
+        // test invalid indices 
+        std::vector<int> buildVals;
+        appendVals(buildVals, 0,10,1);
+        
+        // test list will be in reverse order of build vals
+        std::vector<int> expected(buildVals);
+        std::reverse(buildVals.begin(), buildVals.end());
+
+        std::vector<int> testIndices = {-1, static_cast<int>(buildVals.size()), 
+                static_cast<int>(buildVals.size()+1)};
+
+        testGet(buildVals, expected, testIndices);
+    }
+
+    {
+        // random testing 
+        for(int i = 0; i < numTests; i++)
+        {
+            int n = m_rg.generate(MIN_ARRAY_SIZE, MAX_ARRAY_SIZE);
+            std::vector<int> buildVals(n);
+            fillRandom(buildVals);
+
+            std::vector<int> expected(buildVals);
+            std::reverse(expected.begin(), expected.end());
+
+            std::vector<int> testIndices(2*n);
+            fillRandom(testIndices, -2*n, 3*n);
+
+            testGet(buildVals, expected, testIndices);
+        }
+    }
+}
+
+ void TestLinkedList::fillRandom(std::vector<int>& testVals, int min, int max)
  {
     size_t n = testVals.size();
     for(size_t i = 0; i < n; i++)
     {
-        testVals[i] = m_rg.generate(MIN_LIST_VALUE, MAX_LIST_VALUE);
+        testVals[i] = m_rg.generate(min, max);
     }
  }
 
@@ -304,11 +362,59 @@ void TestLinkedList::testInsertAtIndex(const std::vector<int>& buildVals, const 
     }
 }
 
+void TestLinkedList::testGet(const std::vector<int>& listVals, const std::vector<int>& expected, const std::vector<int>& testIndices)
+{
+    // Build list from listVals 
+    MyLinkedList list;
+    for(size_t i = 0; i < listVals.size(); i++)
+    {
+        list.insertAtHead(listVals[i]);
+    }
 
+    // Verify list matches expected
+    std::vector<Difference> differences;
+    if(!compareResult(list, expected, differences))
+    {
+        std::cerr << "[FATAL], function: " << __func__ << ", line: " << __LINE__ 
+                << "list does not match expected\nDifferences\n";
+        for(const auto& d : differences)
+        {
+            std::cerr << d;
+        }
+        std::cerr << "\n";
+        std::exit(-1);
+    }
+
+    int listLength = static_cast<int>(expected.size());
+    for(auto index : testIndices)
+    {
+        const Node* node = list.get(index);
+        if(index >= 0 && index < listLength)
+        {
+            if(node->data != expected[index])
+            {
+                std::cerr << "[ERROR], function: " << __func__ << ", line: " << __LINE__ 
+                        << ", list length: " << listLength << ", test index: " << index 
+                        << ", node->data: " << node->data << " != expected[index]: " 
+                        << expected[index] << "\n";
+            }
+        }
+        else
+        {
+            if(node != nullptr)
+            {
+                std::cerr << "[ERROR], function: " << __func__ << ", line: " << __LINE__ 
+                        << ", list length: " << listLength << ", test index: " << index 
+                        << ", expected null ptr, but node address is " << node << "\n";
+            }
+        }
+    }
+}
 
 void TestLinkedList::runAllTests()
 {
     runInsertHeadTests();
     runInsertTailTests();
     runInsertIndexTests();
+    runGetTests();
 }
