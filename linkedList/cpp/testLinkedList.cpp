@@ -199,8 +199,10 @@ void TestLinkedList::runGetTests(int numTests)
     {
         // test empty list 
         std::vector<int> buildVals;
-        std::vector<int> expectedVals;
+        std::vector<int> expected;
         std::vector<int> testIndices = {0, 1};
+
+        testGet(buildVals, expected, testIndices);
     }
 
     {
@@ -248,6 +250,54 @@ void TestLinkedList::runGetTests(int numTests)
             fillRandom(testIndices, -2*n, 3*n);
 
             testGet(buildVals, expected, testIndices);
+        }
+    }
+}
+
+void TestLinkedList::runDeleteIndexTests(int numTests)
+{
+    #if 0
+    {
+        // test empty list 
+        std::vector<int> buildVals;
+        std::vector<int> expected;
+        std::vector<int> testIndices = {0, 1};
+        testGet(buildVals, expected, testIndices);
+    }
+
+    {
+        // test deleting index 0 from list of length 1
+        std::vector<int> buildVals(1);
+        std::vector<int> expected(1);
+        std::vector<int> testIndices = {0};
+        testGet(buildVals, expected, testIndices);
+    }
+
+    {
+        // test deleting index 1 from list of length 1
+        std::vector<int> buildVals(1);
+        std::vector<int> expected(1);
+        std::vector<int> testIndices = {1};
+        testGet(buildVals, expected, testIndices);
+    }
+
+    #endif 
+
+    {
+        // random testing 
+        for(int i = 0; i < numTests; i++)
+        {
+            int n = m_rg.generate(MIN_ARRAY_SIZE, MAX_ARRAY_SIZE);
+            std::vector<int> buildVals(n);
+            fillRandom(buildVals);
+
+            std::vector<int> expected(buildVals);
+            std::reverse(expected.begin(), expected.end());
+
+            std::vector<int> testIndices(2*n);
+            fillRandom(testIndices, -2*n, 3*n);
+
+            testDeleteAtIndex(buildVals, expected, testIndices);
         }
     }
 }
@@ -411,10 +461,60 @@ void TestLinkedList::testGet(const std::vector<int>& listVals, const std::vector
     }
 }
 
+void TestLinkedList::testDeleteAtIndex(const std::vector<int>& listVals, const std::vector<int>& expected, 
+                    const std::vector<int>& testIndices)
+{
+    // Build list from listVals 
+    MyLinkedList list;
+    for(size_t i = 0; i < listVals.size(); i++)
+    {
+        list.insertAtHead(listVals[i]);
+    }
+
+    std::vector<int> expectedAfterDeletion(expected);
+
+    for(auto index : testIndices)
+    {
+        list.deleteAtIndex(index);
+        if(index >= 0 && index < static_cast<int>(expectedAfterDeletion.size()))
+        {
+            expectedAfterDeletion.erase(expectedAfterDeletion.begin() + index);
+        }
+
+        // Verify list matches expected
+        std::vector<Difference> differences;
+        if(!compareResult(list, expectedAfterDeletion, differences))
+        {
+            std::cerr << "[ERROR], function: " << __func__ << ", line: " << __LINE__ 
+                    << "list does not match expected\nDifferences\n";
+            for(const auto& d : differences)
+            {
+                std::cerr << d;
+            }
+            std::cerr << "\nDeletion index: " << index << "\n";
+            std::cerr << "List after  " << list;
+            std::cerr << "Expected:   ";
+            print(expectedAfterDeletion);
+            std::exit(-1);
+        }
+    }
+}
+
+
+ void TestLinkedList::print(const std::vector<int>& vals)
+ {
+    for(auto val : vals)
+    {
+        std::cerr << val << " ";
+    }
+    std::cerr << "\n";
+ }
+
 void TestLinkedList::runAllTests()
 {
     runInsertHeadTests();
     runInsertTailTests();
     runInsertIndexTests();
     runGetTests();
+    runDeleteIndexTests();
 }

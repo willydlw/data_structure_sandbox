@@ -93,28 +93,24 @@ const Node* MyLinkedList::get(int index)
 void MyLinkedList::deleteAtHead()
 {
     if(headptr == nullptr){
-        std::cerr << "[WARNING], function: " << __func__ << " cannot delete from empty list\n";
+        //std::cerr << "[WARNING], function: " << __func__ << " cannot delete from empty list\n";
         return;
     }
-
-    std::cerr << "\nBefore deleting at head: " << *this;
 
     Node* temp = headptr->next;
     delete headptr;
     headptr = temp;
-
-    std::cerr << "After deleting at head: " << *this << "\n";
 }
 
 void MyLinkedList::deleteAtIndex(int index)
 {
     if(headptr == nullptr){
-        std::cerr << "[WARNING], function: " << __func__ << " cannot delete from empty list\n";
+        //std::cerr << "[WARNING], function: " << __func__ << " cannot delete from empty list\n";
         return;
     }
 
     if(index < 0){
-        std::cerr << "[WARNING], function: " << __func__ << " invalid index: " << index << "\n";
+        //std::cerr << "[WARNING], function: " << __func__ << " invalid index: " << index << "\n";
         return;
     }
 
@@ -130,7 +126,7 @@ void MyLinkedList::deleteAtIndex(int index)
     }
 
     if(current == nullptr || current->next == nullptr){
-        std::cerr << "[WARNING], function: " << __func__ << " index: " << index << "out of range\n";
+        //std::cerr << "[WARNING], function: " << __func__ << " index: " << index << " out of range\n";
         return;
     }
 
@@ -145,6 +141,18 @@ const Node* MyLinkedList::head() const
     return headptr;
 }
 
+int MyLinkedList::length() const
+{
+    int count = 0;
+    Node* current = headptr;
+    while(current != nullptr)
+    {
+        count++;
+        current = current->next;
+    }
+
+    return count;
+}
 
 
 std::ostream& operator << (std::ostream& os, const MyLinkedList& list)

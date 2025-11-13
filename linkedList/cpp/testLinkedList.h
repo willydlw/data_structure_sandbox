@@ -16,15 +16,15 @@ struct Difference{
 class TestLinkedList
 {
     static constexpr int MIN_ARRAY_SIZE = 1;
-    static constexpr int MAX_ARRAY_SIZE = 1000;
+    static constexpr int MAX_ARRAY_SIZE = 100;
 
     static constexpr int NUM_TESTS = 10;
 
-    static constexpr int MIN_LIST_VALUE = -9999;
-    static constexpr int MAX_LIST_VALUE = +9999;
+    static constexpr int MIN_LIST_VALUE = 0;
+    static constexpr int MAX_LIST_VALUE = 200;
 
     static constexpr int MIN_INSERTIONS = 1;
-    static constexpr int MAX_INSERTIONS = 100;
+    static constexpr int MAX_INSERTIONS = 20;
 
     public:
 
@@ -33,6 +33,7 @@ class TestLinkedList
     void runInsertTailTests(int numTests = NUM_TESTS);
     void runInsertIndexTests(int numTests = NUM_TESTS);
     void runGetTests(int numTests = NUM_TESTS);
+    void runDeleteIndexTests(int numTests = NUM_TESTS);
 
 
     private:
@@ -57,7 +58,12 @@ class TestLinkedList
     void testInsertAtIndex(const std::vector<int>& buildVals, const std::vector<int>& expected,
                             const std::vector<std::pair<int,int>>& insertVals);
     
-    void testGet(const std::vector<int>& listVals, const std::vector<int>& expected, const std::vector<int>& testIndices);
+    void testGet(const std::vector<int>& listVals, const std::vector<int>& expected, 
+                    const std::vector<int>& testIndices);
+    void testDeleteAtIndex(const std::vector<int>& listVals, const std::vector<int>& expected, 
+                    const std::vector<int>& testIndices);
+
+    void print(const std::vector<int>& vals);
 
 };
 

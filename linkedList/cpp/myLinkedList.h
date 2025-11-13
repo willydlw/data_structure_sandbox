@@ -31,6 +31,7 @@ class MyLinkedList{
     friend std::ostream& operator << (std::ostream& os, const MyLinkedList& list);
 
     const Node* head() const;
+    int length() const;
 
     private:
 
