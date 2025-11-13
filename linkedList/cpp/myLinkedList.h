@@ -24,9 +24,9 @@ class MyLinkedList{
     void deleteAtHead();
     void deleteAtIndex(int index);
 
-    // returns data at index location 
-    // return -1 for invalid index (index > list length)
-    int get(int index);  
+    // returns pointer to node at index location
+    // return nullptr for invalid index (index > list length)
+    const Node* get(int index);  
 
     friend std::ostream& operator << (std::ostream& os, const MyLinkedList& list);
 

@@ -44,7 +44,7 @@
  void MyLinkedList::insertAtIndex(int index, int val)
  {
     if(index < 0){
-        std::cerr << "function: " << __func__ << ", index " << index << " is invalid\n";
+        //std::cerr << "function: " << __func__ << ", index " << index << " is invalid\n";
         return;
     }
 
@@ -60,8 +60,8 @@
     }
 
     if(current == nullptr){
-        std::cerr << "function: " << __func__ << ", index " << index 
-                << " is invalid, longer than list length, current == nullptr\n";
+        //std::cerr << "function: " << __func__ << ", index " << index 
+        //        << " is invalid, longer than list length, current == nullptr\n";
         return;
     }
 
@@ -70,14 +70,14 @@
     current->next = newNode;
  }
 
-int MyLinkedList::get(int index)
+const Node* MyLinkedList::get(int index)
 {
     if(headptr == nullptr || index < 0){
-        return -1;
+        return nullptr;
     }
 
     if(index == 0){
-        return headptr->data;
+        return headptr;
     }
 
     Node* current = headptr;
@@ -86,13 +86,7 @@ int MyLinkedList::get(int index)
         current = current->next;
     }
 
-    if(current == nullptr){
-        std::cerr << "[WARNING], function: " << __func__ << ", invalid index: " << index 
-            << ", list length i: " << i << "\n";
-        return -1;
-    }
-
-    return current->data;
+    return current;
 }
 
 
