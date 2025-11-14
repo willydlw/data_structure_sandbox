@@ -256,7 +256,6 @@ void TestLinkedList::runGetTests(int numTests)
 
 void TestLinkedList::runDeleteIndexTests(int numTests)
 {
-    #if 0
     {
         // test empty list 
         std::vector<int> buildVals;
@@ -280,8 +279,6 @@ void TestLinkedList::runDeleteIndexTests(int numTests)
         std::vector<int> testIndices = {1};
         testGet(buildVals, expected, testIndices);
     }
-
-    #endif 
 
     {
         // random testing 

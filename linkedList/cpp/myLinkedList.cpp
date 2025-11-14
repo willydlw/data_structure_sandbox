@@ -119,18 +119,34 @@ void MyLinkedList::deleteAtIndex(int index)
         return;
     }
 
+    // Find the node at index-1. Its current->next points to the node at index.
     Node* current = headptr;
     for(int i = 0; current != nullptr && i < index-1; i++)
     {
         current = current->next;
     }
 
-    if(current == nullptr || current->next == nullptr){
+    // loop above may have terminated because 
+    //  1) i == index -1 
+    //  2) current == nullptr 
+    //  3) both (1) and (2)
+    if(current == nullptr){
+        // reached end of list, index value is out of range
         //std::cerr << "[WARNING], function: " << __func__ << " index: " << index << " out of range\n";
         return;
     }
 
+    // here we assume the loop ended because i == index-1
+    // if current->next is null, then the node at index does not exist
+    if(current->next == nullptr){
+        return;
+    }
+
     // current->next points to node to be deleted
+    // We have one of two cases:
+    //  1) node to be deleted is last node in list, so current->next->next is null
+    //  2) node to be deleted is not last node in list, so current->next->next points 
+    //      to the remainder of the list
     Node* next = current->next->next;
     delete current->next;
     current->next = next;

@@ -16,15 +16,15 @@ struct Difference{
 class TestLinkedList
 {
     static constexpr int MIN_ARRAY_SIZE = 1;
-    static constexpr int MAX_ARRAY_SIZE = 100;
+    static constexpr int MAX_ARRAY_SIZE = 1000;
 
-    static constexpr int NUM_TESTS = 10;
+    static constexpr int NUM_TESTS = 100;
 
-    static constexpr int MIN_LIST_VALUE = 0;
-    static constexpr int MAX_LIST_VALUE = 200;
+    static constexpr int MIN_LIST_VALUE = -2000;
+    static constexpr int MAX_LIST_VALUE = 2000;
 
     static constexpr int MIN_INSERTIONS = 1;
-    static constexpr int MAX_INSERTIONS = 20;
+    static constexpr int MAX_INSERTIONS = 50;
 
     public:
 
